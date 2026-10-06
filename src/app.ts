@@ -5,6 +5,7 @@ import config from "./config";
 import { prisma } from "./lib/prisma";
 import httpstatus from "http-status";
 import bcrypt from "bcryptjs";
+import { userRouter } from "./modules/auth/auth.route";
 
 const app: Application = express();
 
@@ -21,46 +22,6 @@ app.get("/", (req: Request, res: Response) => {
     res.send("hello, world")
 })
 
-app.post("/api/auth/register", async (req: Request, res: Response) => { 
-
-    const { name, email, password, phone, avatar, role } = req.body;
-    
-    const isUserExist = await prisma.user.findUnique({
-        where: {
-            email,
-        }
-    });
-
-    if (isUserExist) {
-        throw new Error("User already exists");
-    }
-
-    const hasheddPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
-
-    const newUser = await prisma.user.create({
-        data: {
-            name,
-            email,
-            password: hasheddPassword,
-            phone,
-            avatar,
-            role,
-        },
-
-        
-    })
-
-    console.log(newUser);
-    
-
-
-
-
-    res.status(httpstatus.CREATED).json({
-        message: "User registered successfully",
-        data: newUser,
-     });
-    
-})
+app.use("/api/auth", userRouter);
 
 export default app; 
