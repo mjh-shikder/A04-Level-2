@@ -45,3 +45,18 @@ enum PaymentStatus {
   CANCELLED
 }
 
+enum CategoryName {
+  APARTMENT
+  HOUSE
+  VILLA
+  STUDIO
+  OFFICE
+  GARAGE
+  SHOP
+  FACTORY
+  WAREHOUSE
+  FARMLAND
+  RESORT
+  HOTEL
+  OTHER
+}
