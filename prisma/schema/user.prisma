@@ -1,4 +1,4 @@
-model user{
+model User{
 id        String     @id @default(uuid())
   name      String
   email     String     @unique
@@ -10,7 +10,10 @@ id        String     @id @default(uuid())
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
-
+  properties     Property[]
+  rentalRequests RentalRequest[]
+  payments       Payment[]
+  reviews        Review[]
 
   @@map("users")
 }

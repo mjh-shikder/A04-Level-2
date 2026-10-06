@@ -1,0 +1,18 @@
+model Review {
+  id              String   @id @default(uuid())
+  tenantId        String
+  propertyId      String
+  rentalRequestId String?  @unique
+  comment         String?
+  rating          Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant        User           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  property      Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  rentalRequest RentalRequest? @relation(fields: [rentalRequestId], references: [id], onDelete: SetNull)
+
+  @@index([propertyId])
+  @@index([tenantId])
+  @@map("reviews")
+}

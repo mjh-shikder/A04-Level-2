@@ -8,3 +8,40 @@ enum UserStatus {
   ACTIVE
   BLOCKED
 }
+
+enum PropertyStatus {
+  AVAILABLE
+  RENTED
+  MAINTENANCE
+}
+
+enum RentalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentProvider {
+  SSLCOMMERZ
+  STRIPE
+}
+
+enum PaymentMethod {
+  SSLCOMMERZ
+  STRIPE
+  CARD
+  MOBILE_BANKING
+  NET_BANKING
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+

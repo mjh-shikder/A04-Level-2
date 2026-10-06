@@ -1,0 +1,25 @@
+model Payment {
+  id              String          @id @default(uuid())
+  rentalRequestId String
+  userId          String
+  transactionId   String          @unique
+  amount          Decimal         @db.Decimal(12, 2)
+  method          PaymentMethod?  @default(SSLCOMMERZ)
+  provider        PaymentProvider @default(SSLCOMMERZ)
+  status          PaymentStatus   @default(PENDING)
+  bankTranId      String?
+  cardType        String?
+  cardBrand       String?
+  paidAt          DateTime?
+  gatewayResponse Json?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  rentalRequest RentalRequest @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([rentalRequestId])
+  @@index([userId])
+  @@index([transactionId])
+  @@map("payments")
+}
