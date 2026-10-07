@@ -24,12 +24,23 @@ const registerUser = catchAsync(
 //* Login User
 const login = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-    const result = await authService.loginUser(payload);
+  const {user, accessToken} = await authService.loginUser(payload);
+
+
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24 * 30 
+  });
 
 
     res.status(httpstatus.OK).json({
         message: "user logged in successfully",
-        data: result
+      data: {
+        user,
+        accessToken
+      }
     })
     
 });
