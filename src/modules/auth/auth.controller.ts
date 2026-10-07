@@ -4,42 +4,9 @@ import bcrypt from "bcryptjs";
 import config from "../../config";
 import httpstatus from "http-status";
 import { authService } from "./auth.service";
+import { catchAsync } from "../../utils/catchAsync";
 
-const catchAsync = (fn: RequestHandler) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await fn(req, res, next);
-    } catch (error) {
-      console.log(error);
-      res.status(httpstatus.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: "Internal server error",
-        error: (error as Error).message,
-      });
-    }
-  };
-};
-
-// const registerUser = async (req: Request, res: Response) => {
-//   try {
-//     const payload = req.body;
-
-//     const user = await authService.registerUserIntoDB(payload);
-
-//     res.status(httpstatus.CREATED).json({
-//       message: "User registered successfully",
-//       data: user,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(httpstatus.INTERNAL_SERVER_ERROR).json({
-//       success: false,
-//       message: "Internal server error",
-//       error: (error as Error).message,
-//     });
-//   }
-// };
-
+//* Creating New User
 const registerUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
@@ -53,6 +20,22 @@ const registerUser = catchAsync(
   },
 );
 
+//* Login User
+const login = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+    const result = await authService.loginUser(payload);
+
+
+    res.status(httpstatus.OK).json({
+        message: "user logged in successfully",
+        data: result
+    })
+    
+});
+
+
+
 export const authController = {
   registerUser,
+  login,
 };

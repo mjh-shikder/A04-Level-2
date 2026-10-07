@@ -8,3 +8,9 @@ export interface RegisterUserPayload {
   avatar?: string;
   role?: UserRole;
 }
+
+
+export interface ILoginUser { 
+  email: string;
+  password: string;
+}
