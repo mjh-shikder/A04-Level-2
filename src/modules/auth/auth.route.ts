@@ -7,5 +7,7 @@ router.post("/register", authController.registerUser);
 
 router.post("/login", authController.login)
 
+router.get("/me",authController.getMe)
+
 
 export const userRouter = router;
