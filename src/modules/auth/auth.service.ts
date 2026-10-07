@@ -100,7 +100,11 @@ const getMe = async (userId: string) => {
 
     if (!user) { 
         throw new Error("User Not Found!");
-    }
+  }
+
+  if(user.status === UserStatus.BLOCKED) {
+    throw new Error("Your Account is Blocked by the Admin, Contact Support.")
+  }
 
     return user;
 
