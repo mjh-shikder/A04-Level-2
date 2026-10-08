@@ -3,8 +3,7 @@ model Property {
   categoryId      String
   landlordId      String
   title           String
-  description     String
-  propertyType    String
+  description     String?
   bedrooms        Int?
   bathrooms       Int?
   area            Float?
