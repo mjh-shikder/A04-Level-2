@@ -107,11 +107,32 @@ const getAllProperties = catchAsync(async (req: Request, res: Response) => {
 
 })
 
+
+// * Get Detailed Property by property Id
+const getPropertyById = catchAsync(async (req: Request, res: Response) => { 
+
+    const { id } = req.params
+
+    if (typeof id !== "string") {
+        throw new Error("enter a valid property ID ")
+    }
+
+    const result = await propertyService.getPropertyById(id)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpstatus.OK,
+        message: "Property Retrived successfully",
+        data: result
+    })
+})
+
 export const propertyController = {
     createProperty,
     updateProperty,
     deleteProperty,
     getLandLordProperties,
     getAllProperties,
+    getPropertyById,
   
 };

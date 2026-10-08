@@ -246,12 +246,62 @@ const getAllProperties = async (query: IGetAllPropertiesQuery) => {
 }
 
 
+// * Get Detailed Property by property id
+const getPropertyById = async (id: string) => { 
+
+    const property = await prisma.property.findUniqueOrThrow({
+        where: { id },
+        include: {
+            category: true,
+            landlord: {
+                select: {
+                    id: true, 
+                    name: true,
+                    email: true, 
+                    phone: true,
+                    avatar: true
+                },
+                
+            },
+            reviews: {
+                include: {
+                    tenant: {
+                        select: {
+                            id: true,
+                            name: true,
+                            avatar: true,
+                        }
+                    }
+                }
+
+            }
+
+        }
+    })
+
+    if (!property) { 
+        throw new Error ("Property Not Found")
+    }
+
+
+    const totalReviews = property.reviews.length;
+
+    const avgRating = totalReviews > 0 ? property.reviews.reduce((acc, curr) => acc + curr.rating, 0) / totalReviews : 0; 
+
+    return { 
+        ...property,
+        totalReviews,
+        averageRating: parseFloat(avgRating.toFixed(1))
+    }
+
+}
+
 export const propertyService = {
     createProperty,
     updateProperty,
     deleteProperty,
     getLandlordProperties,
     getAllProperties,
-
+    getPropertyById,
     
 }
