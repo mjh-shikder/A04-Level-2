@@ -10,10 +10,13 @@ const createProperty = catchAsync(async (req: Request, res: Response) => {
 
     const payload = req.body
 
-    console.log(payload,"payload out put check");
+    console.log(payload, "payload out put check");
 
 
-    const result = await propertyService.createProperty(payload)
+    const requesterRole = req.user?.role as string
+
+
+    const result = await propertyService.createProperty(payload, requesterRole)
 
 
     sendResponse(res, {
