@@ -67,16 +67,32 @@ const deleteProperty = catchAsync(async (req: Request, res: Response) => {
       sendResponse(res, {
         success: true,
         statusCode: httpstatus.OK,
-        message: "Property Updatede Successfully",
+        message: "Property Deleted Successfully",
         data: null,
       });
 
 })
 
 
+// * Get LandLord Properties 
+const getLandLordProperties = catchAsync(async (req: Request, res: Response) => { 
+
+    const result = await propertyService.getLandlordProperties(req.user!.userId)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpstatus.OK,
+        message: 'Landlord properties retrived successfully',
+        data: result,
+    })
+
+})
+
 export const propertyController = {
     createProperty,
     updateProperty,
     deleteProperty,
+    getLandLordProperties,
+
   
 };
