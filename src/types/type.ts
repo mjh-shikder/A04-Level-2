@@ -1,3 +1,5 @@
+import { PropertyStatus } from "../../generated/prisma/client";
+
 export interface ICreateProperty {
   landlordId: string;
   categoryId: string;
@@ -34,4 +36,22 @@ export interface IUpdateProperty {
   country?: string;
   availableFrom?: string;
   images?: string[];
+}
+
+
+export interface IGetAllPropertiesQuery {
+  search?: string;
+  city?: string;
+  country?: string;
+  categoryId?: string;
+  minRent?: string;
+  maxRent?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  furnished?: string;
+  status?: PropertyStatus;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
 }

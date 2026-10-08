@@ -88,11 +88,30 @@ const getLandLordProperties = catchAsync(async (req: Request, res: Response) => 
 
 })
 
+
+// * Get All Properties
+const getAllProperties = catchAsync(async (req: Request, res: Response) => { 
+
+    const query = req.query 
+
+    const result = await propertyService.getAllProperties(query)
+
+   sendResponse(res, {
+   success: true,
+   statusCode: httpstatus.OK,
+   message: "Landlord properties retrived successfully",
+   meta: result.meta,
+   data: result.data,
+ });
+
+
+})
+
 export const propertyController = {
     createProperty,
     updateProperty,
     deleteProperty,
     getLandLordProperties,
-
+    getAllProperties,
   
 };

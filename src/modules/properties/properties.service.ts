@@ -1,6 +1,6 @@
-import { PropertyStatus, UserRole, UserStatus } from "../../../generated/prisma/client";
+import { Prisma, PropertyStatus, UserRole, UserStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { ICreateProperty, IUpdateProperty } from "../../types/type";
+import { ICreateProperty, IGetAllPropertiesQuery, IUpdateProperty } from "../../types/type";
 
 const createProperty = async (payload: ICreateProperty, requesterRole: string, requesterStatus: string) => {
   const category = await prisma.category.findUnique({
@@ -125,11 +125,133 @@ const getLandlordProperties = async (landlordId: string) => {
     return properties
 }
 
+
+// * Get All Properties
+const getAllProperties = async (query: IGetAllPropertiesQuery) => {
+
+    const page = parseInt(query.page || '1', 10);
+    const limit = parseInt(query.limit || '10', 10)
+    const skip = (page - 1) * limit;
+
+    const whereConditions: Prisma.PropertyWhereInput = {};
+
+    if (query.sortOrder) {
+        whereConditions.status = query.status;
+
+    } else { 
+        whereConditions.status = PropertyStatus.AVAILABLE;
+    }
+
+    if (query.city) { 
+        whereConditions.city = { equals: query.city, mode: 'insensitive' }
+    }
+
+    
+  if (query.country) {
+    whereConditions.country = { equals: query.country, mode: "insensitive" };
+  }
+
+  if (query.categoryId) {
+    whereConditions.categoryId = query.categoryId;
+  }
+
+  if (query.bedrooms) {
+    whereConditions.bedrooms = parseInt(query.bedrooms, 10);
+  }
+
+  if (query.bathrooms) {
+    whereConditions.bathrooms = parseInt(query.bathrooms, 10);
+  }
+
+  if (query.furnished !== undefined) {
+    whereConditions.furnished = query.furnished === "true";
+  }
+
+  if (query.minRent || query.maxRent) {
+    whereConditions.rent = {};
+    if (query.minRent) {
+      whereConditions.rent.gte = parseFloat(query.minRent);
+    }
+    if (query.maxRent) {
+      whereConditions.rent.lte = parseFloat(query.maxRent);
+    }
+  }
+
+  if (query.search) {
+    whereConditions.OR = [
+      { title: { contains: query.search, mode: "insensitive" } },
+      { description: { contains: query.search, mode: "insensitive" } },
+      { address: { contains: query.search, mode: "insensitive" } },
+      { city: { contains: query.search, mode: "insensitive" } },
+    ];
+    }
+
+    const sortBy = query.sortBy || "createdAt";
+    const sortOrder = query.sortOrder || "desc";
+
+    const [properties, total] = await Promise.all([
+      prisma.property.findMany({
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: { [sortBy]: sortOrder },
+        include: {
+          category: true,
+          landlord: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              avatar: true,
+            },
+          },
+          reviews: {
+            select: {
+              rating: true,
+            },
+          },
+        },
+      }),
+      prisma.property.count({ where: whereConditions }),
+    ]);
+
+
+     const formattedProperties = properties.map((property) => {
+       const totalRatings = property.reviews.length;
+       const avgRating =
+         totalRatings > 0
+           ? property.reviews.reduce((acc, curr) => acc + curr.rating, 0) /
+             totalRatings
+           : 0;
+
+       const { reviews, ...rest } = property;
+       return {
+         ...rest,
+         totalReviews: totalRatings,
+         averageRating: parseFloat(avgRating.toFixed(1)),
+       };
+     });
+
+     return {
+       meta: {
+         page,
+         limit,
+         total,
+         totalPage: Math.ceil(total / limit),
+       },
+       data: formattedProperties,
+     };
+    
+}
+
+
 export const propertyService = {
     createProperty,
     updateProperty,
     deleteProperty,
-    getLandlordProperties
+    getLandlordProperties,
+    getAllProperties,
 
     
 }

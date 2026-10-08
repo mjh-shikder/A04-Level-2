@@ -13,4 +13,6 @@ router.delete("/landlord/properties/:id", auth(UserRole.LANDLORD, UserRole.ADMIN
 
 router.get("/landlord/properties", auth(UserRole.LANDLORD), propertyController.getLandLordProperties);
 
+router.get("/all/properties", auth(UserRole.ADMIN), propertyController.getAllProperties)
+
 export const propertiesRouter = router;
