@@ -1,8 +1,8 @@
-import { PropertyStatus, UserRole } from "../../../generated/prisma/client";
+import { PropertyStatus, UserRole, UserStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { ICreateProperty } from "../../types/type";
+import { ICreateProperty, IUpdateProperty } from "../../types/type";
 
-const createProperty = async (payload: ICreateProperty, requesterRole: string) => {
+const createProperty = async (payload: ICreateProperty, requesterRole: string, requesterStatus: string) => {
   const category = await prisma.category.findUnique({
     where: { id: payload.categoryId },
   });
@@ -13,6 +13,10 @@ const createProperty = async (payload: ICreateProperty, requesterRole: string) =
 
     if (requesterRole === UserRole.TENANT) { 
         throw new Error ("Teants Cannot Create Property")
+    }
+
+    if (requesterStatus === UserStatus.BLOCKED) { 
+        throw new Error ("You have been blocked by the Admin")
     }
 
   const property = await prisma.property.create({
@@ -41,7 +45,34 @@ const createProperty = async (payload: ICreateProperty, requesterRole: string) =
 };
 
 
+//* Update Property 
+const updateProperty = async (id: string, userId: string, userRole: UserRole, payload: IUpdateProperty ) => { 
+
+    const property = await prisma.property.findUniqueOrThrow({
+        where: { id }
+    });
+
+    if (userRole === UserRole.TENANT) { 
+        throw new Error("Youre are not authorized to update property")
+    }
+
+
+    const updateProperty = await prisma.property.update({
+        where: { id },
+        data: payload,
+        include: {
+            category: true
+        }
+    })
+
+    return updateProperty;
+
+}
+
+
 export const propertyService = {
     createProperty,
+    updateProperty,
+
     
 }

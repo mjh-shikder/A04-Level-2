@@ -18,6 +18,7 @@ export const sendResponse = <T>(res: Response, data: IResponse<T>) => {
 
     res.status(data.statusCode).json({
         success: data.success,
+        statusCode: data.statusCode,
         message: data.message || "Operation Successful",
         meta: data.meta,
         data: data.data,
