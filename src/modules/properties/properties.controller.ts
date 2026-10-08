@@ -74,7 +74,7 @@ const deleteProperty = catchAsync(async (req: Request, res: Response) => {
 })
 
 
-// * Get LandLord Properties 
+// * Get LandLord Properties with rental reques and review
 const getLandLordProperties = catchAsync(async (req: Request, res: Response) => { 
 
     const result = await propertyService.getLandlordProperties(req.user!.userId)

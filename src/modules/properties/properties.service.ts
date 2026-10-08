@@ -105,7 +105,7 @@ const deleteProperty = async (id: string, userId: string, userRole: UserRole) =>
 };
 
 
-// * Get Land Lord Properties
+// * Get Land Lord Properties with rental reques and review
 const getLandlordProperties = async (landlordId: string) => { 
 
     const properties = await prisma.property.findMany({
