@@ -70,9 +70,45 @@ const updateProperty = async (id: string, userId: string, userRole: UserRole, pa
 }
 
 
+// * Delete Property
+const deleteProperty = async (id: string, userId: string, userRole: UserRole) => {
+
+    const property = await prisma.property.findUnique({
+        where: { id },
+        include: {
+            rentalRequests: {
+                where: {
+                    status: { in: ['ACTIVE', 'PENDING', 'PAID', 'APPROVED'] }
+                }
+            }
+        }
+    })
+
+    if (!property) {
+        throw new Error('Property Not Found');
+    }
+
+    if (userRole === UserRole.TENANT) {
+        throw new Error("You are not authorized to delete this property")
+    }
+
+    if (property.rentalRequests.length > 0) {
+        throw new Error('Cannot delete this property with active or pending rental requests!')
+    }
+
+    await prisma.property.delete({
+        where: { id }
+    })
+
+    return { message: "Property Deleted Successfully" }
+
+};
+
+
 export const propertyService = {
     createProperty,
     updateProperty,
+    deleteProperty,
 
     
 }

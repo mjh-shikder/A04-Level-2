@@ -53,7 +53,30 @@ const updateProperty = catchAsync(async (req: Request, res: Response) => {
 })
 
 
+//* Delete Property 
+const deleteProperty = catchAsync(async (req: Request, res: Response) => { 
+
+    const { id } = req.params
+
+    if (typeof id !== "string") {
+      throw new Error("Property ID is not valid");
+    }
+
+    const result = await propertyService.deleteProperty(id, req.user!.userId, req.user!.role)
+
+      sendResponse(res, {
+        success: true,
+        statusCode: httpstatus.OK,
+        message: "Property Updatede Successfully",
+        data: null,
+      });
+
+})
+
+
 export const propertyController = {
     createProperty,
-  updateProperty,
+    updateProperty,
+    deleteProperty,
+  
 };
