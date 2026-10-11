@@ -6,7 +6,9 @@ import { rentalRequestController } from "./rentalRequest.controller";
 
 const router = Router()
 
-router.post("/rental-request", auth(UserRole.TENANT), rentalRequestController.createRentalRequest)
+router.post("/create-request", auth(UserRole.TENANT), rentalRequestController.createRentalRequest)
+
+router.get("/tenant-requests", auth(UserRole.TENANT), rentalRequestController.getTenantRentalRequests)
 
 
 export const rentalRequestRouter = router

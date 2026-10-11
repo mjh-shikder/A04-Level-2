@@ -4,8 +4,9 @@ import { rentalRequestService } from "./rentalRequest.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
 
-const createRentalRequest = catchAsync(async (req: Request, res: Response) => { 
 
+// * Creaeting Rental Request
+const createRentalRequest = catchAsync(async (req: Request, res: Response) => { 
 
     const tenantId = req.user?.userId as string
 
@@ -23,6 +24,24 @@ const createRentalRequest = catchAsync(async (req: Request, res: Response) => {
 })
 
 
+//* Get Tenant Rental Requests
+const getTenantRentalRequests = catchAsync(
+    async (req: Request, res: Response) => {
+    
+        const tenantId = req.user?.userId as string;
+
+    const result = await rentalRequestService.getTenantRentalRequests(tenantId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "My rental requests retrived successfully",
+      data: result,
+    });
+  },
+);
+
 export const rentalRequestController = {
-    createRentalRequest
-}
+  createRentalRequest,
+  getTenantRentalRequests,
+};

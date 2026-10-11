@@ -1,6 +1,7 @@
 import { RentalStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
+//* Creating Rental Request
 const createRentalRequest = async (tenantId: string, payload: {
     propertyId: string;
     startDate: Date;
@@ -88,8 +89,33 @@ const createRentalRequest = async (tenantId: string, payload: {
 }
 
 
+// * Get My Rental Requests
+const getTenantRentalRequests = async (tenantId: string) => {
+  const rentalRequests = await prisma.rentalRequest.findMany({
+    where: {
+      tenantId,
+    },
+    include: {
+      property: {
+        include: {
+          landlord: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+            },
+          },
+        }
+      },
+      review: true,
+    }
+  });
+
+  return rentalRequests;
+};
 
 export const rentalRequestService = {
-    createRentalRequest,
-
-}
+  createRentalRequest,
+  getTenantRentalRequests,
+};

@@ -28,6 +28,6 @@ app.use("/api/auth", userRouter);
 
 app.use("/api", propertiesRouter);
 
-app.use("/api", rentalRequestRouter)
+app.use("/api/rental", rentalRequestRouter);
 
 export default app; 
