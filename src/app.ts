@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs";
 import { userRouter } from "./modules/auth/auth.route";
 import { propertiesRouter } from "./modules/properties/properties.route";
 import { rentalRequestRouter } from "./modules/rentalRequest/rentalRequest.route";
+import { categoryRouter } from "./modules/category/category.route";
 
 const app: Application = express();
 
@@ -29,5 +30,7 @@ app.use("/api/auth", userRouter);
 app.use("/api", propertiesRouter);
 
 app.use("/api/rental", rentalRequestRouter);
+
+app.use("api/category", categoryRouter);
 
 export default app; 
