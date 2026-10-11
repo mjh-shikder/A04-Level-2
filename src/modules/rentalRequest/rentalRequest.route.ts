@@ -8,7 +8,8 @@ const router = Router()
 
 router.post("/create-request", auth(UserRole.TENANT), rentalRequestController.createRentalRequest)
 
-router.get("/tenant-requests", auth(UserRole.TENANT), rentalRequestController.getTenantRentalRequests)
+router.get("/tenants-requests", auth(UserRole.TENANT), rentalRequestController.getTenantRentalRequests)
 
+router.get("/tenants-requests/:id", auth(UserRole.TENANT), rentalRequestController.getRentalRequestById);
 
 export const rentalRequestRouter = router

@@ -1,4 +1,4 @@
-import { RentalStatus } from "../../../generated/prisma/client";
+import { RentalStatus, UserRole } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 //* Creating Rental Request
@@ -89,7 +89,7 @@ const createRentalRequest = async (tenantId: string, payload: {
 }
 
 
-// * Get My Rental Requests
+// * Get Tenant Rental Requests
 const getTenantRentalRequests = async (tenantId: string) => {
   const rentalRequests = await prisma.rentalRequest.findMany({
     where: {
@@ -115,7 +115,57 @@ const getTenantRentalRequests = async (tenantId: string) => {
   return rentalRequests;
 };
 
+
+
+//* Get Rental request details by rental request Id 
+const getRentalRequestById = async (id: string, userId: string, userRole: UserRole) => {
+
+  const rentalRequest = await prisma.rentalRequest.findUnique({
+    where: { id },
+    include: {
+      property: {
+        include: {
+          landlord: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true
+            }
+          }
+        }
+      },
+      tenant: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          avatar: true,
+        }
+      },
+      review: true
+    }
+  })
+
+  if (!rentalRequest) {
+    throw new Error("Rental Request not Found!")
+  }
+
+  if (userRole !== UserRole.ADMIN &&
+    rentalRequest.tenantId !== userId &&
+    rentalRequest.landlordId !== userId) {
+    throw new Error("Youre not authorized to view this rental request")
+  }
+
+  return rentalRequest
+
+};
+
+
 export const rentalRequestService = {
   createRentalRequest,
   getTenantRentalRequests,
+  getRentalRequestById,
+
 };

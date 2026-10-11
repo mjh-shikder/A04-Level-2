@@ -41,7 +41,35 @@ const getTenantRentalRequests = catchAsync(
   },
 );
 
+
+//* get rental request details by rental request id
+const getRentalRequestById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (typeof id !== "string") {
+    throw new Error("Rental request ID is not valid");
+  }
+
+  const user = req.user;
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const result = await rentalRequestService.getRentalRequestById(id, user.userId, user.role);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Rental request Retrieved successfully",
+    data: result,
+  });
+});
+
+
 export const rentalRequestController = {
   createRentalRequest,
   getTenantRentalRequests,
+  getRentalRequestById,
+  
 };
