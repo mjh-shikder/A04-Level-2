@@ -31,6 +31,6 @@ app.use("/api", propertiesRouter);
 
 app.use("/api/rental", rentalRequestRouter);
 
-app.use("api/category", categoryRouter);
+app.use("/api/category", categoryRouter);
 
 export default app; 
