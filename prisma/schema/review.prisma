@@ -4,7 +4,7 @@ model Review {
   propertyId      String
   rentalRequestId String?  @unique
   comment         String?
-  rating          Int
+  rating          Float
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

@@ -55,3 +55,12 @@ export interface IGetAllPropertiesQuery {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }
+
+
+export interface ICreateReviewPayload { 
+    propertyId: string;
+    rentalRequestId?: string;
+    rating: number;
+    comment?: string;
+  
+}
