@@ -1,14 +1,20 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
 import config from "../../config";
-import { ILoginUser, RegisterUserPayload } from "./auth.interface";
+import { ILoginUser, IRegisterUserPayload } from "./auth.interface";
 import { UserStatus } from "../../../generated/prisma/client";
 import { createToken } from "../../utils/jwt";
 import { SignOptions } from "jsonwebtoken";
 
 //* Creating New User into DB
-const registerUserIntoDB = async (payload: RegisterUserPayload) => {
+const registerUserIntoDB = async (payload: IRegisterUserPayload) => {
+
   const { name, email, password, phone, avatar, role } = payload;
+
+   if (payload.role !== "LANDLORD" && payload.role !== "TENANT") {
+     throw new Error("Invalid Role");
+   }
+
   const isUserExist = await prisma.user.findUnique({
     where: {
       email,

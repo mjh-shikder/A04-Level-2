@@ -9,7 +9,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 
 
-export const auth = (...roles: UserRole[]) => { 
+export const auth = (...requiredRoles: UserRole[]) => { 
 
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => { 
        
@@ -28,11 +28,11 @@ export const auth = (...roles: UserRole[]) => {
         const verifiedToken = verifyToken(token, config.jwt.secret) as IAuthUser;
 
        
-        const {id} = verifiedToken as JwtPayload
+        const {id, name, role, email} = verifiedToken as JwtPayload
 
         //* checking if user exist in db and also is the user is active
         const user = await prisma.user.findUnique({
-          where: { id },
+          where: { id, name, role, email },
         });
 
         if (!user) {
@@ -43,6 +43,10 @@ export const auth = (...roles: UserRole[]) => {
            throw new Error("Your account has been blocked by Admin");
         }
 
+
+      if (requiredRoles.length && !requiredRoles.includes(role)) { 
+        throw new Error("You Do Not Have Permission!")
+      }
      
 
         req.user = {

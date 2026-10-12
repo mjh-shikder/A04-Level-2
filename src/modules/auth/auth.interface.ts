@@ -1,12 +1,12 @@
 import { UserRole } from "../../../generated/prisma/client";
 
-export interface RegisterUserPayload {
+export interface IRegisterUserPayload {
   name: string;
   email: string;
   password: string;
   phone?: string;
   avatar?: string;
-  role?: UserRole;
+  role?: "LANDLORD" | "TENANT";
 }
 
 
