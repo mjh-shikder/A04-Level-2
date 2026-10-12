@@ -13,5 +13,7 @@ router.get("/all-properties", adminController.getAllProperties)
 
 router.get("/all-rentals", adminController.getAllRentalRequests)
 
+router.patch("/users/:id", adminController.updateUserStatus)
+
 
 export const adminRouter = router;

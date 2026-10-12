@@ -49,8 +49,34 @@ const getAllRentalRequests = catchAsync(async (req: Request, res: Response) => {
   });
 })
 
+
+// * Block or Unblock user 
+const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
+
+    const { id } = req.params
+    
+    const status = req.body.status 
+
+    
+    if (typeof id !== 'string') { 
+        throw new Error ("Provide a valid User Id")
+    }
+
+
+    const result = await adminService.updateUserStatus(id, status)
+
+      sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Update User Status Successfully",
+        data: result,
+      });
+
+});
+
 export const adminController = {
     getAllUsers,
     getAllProperties,
-    getAllRentalRequests
+    getAllRentalRequests,
+    updateUserStatus
 }
