@@ -201,9 +201,76 @@ const getLanlordRentalRequest = async (landlordId: string, query: {status?: Rent
 }
 
 
+//* Approve or reject Renta
+const updateRentalStatus = async (id: string, userId: string, userRole: UserRole, payload: { status: RentalStatus;  landlordMessage?: string}) => { 
+
+  const rentalRequest = await prisma.rentalRequest.findUnique({
+    where: { id },
+    include: {
+      property: true
+    }
+  })
+
+  if (!rentalRequest) { 
+    throw new Error ("Rental Request Not Found!")
+  }
+
+  if (userRole !== UserRole.ADMIN && rentalRequest.landlordId !== userId) { 
+    throw new Error("Only the landlord of this property can approve or reject this request!")
+  }
+
+  if (rentalRequest.status !== RentalStatus.PENDING) {
+    throw new Error(`Cannot Update Status! The Rental Request is already marked as ${rentalRequest.status}`)
+  }
+
+  const updateRentalRequest = await prisma.rentalRequest.update({
+    where: { id },
+    data: {
+      status: payload.status,
+      landlordMessage: payload.landlordMessage,
+      respondedAt: new Date(),
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          category: {
+            select: {
+              id: true,
+              name: true
+          }},
+          title: true,
+          description: true,
+          bedrooms: true,
+          bathrooms: true,
+          area: true,
+          floor: true,
+          rent: true,
+          securityDeposit: true,
+          city: true,
+
+        }
+      },
+      tenant: {
+        select: {
+          id: true,
+          name: true,
+          email: true
+        }
+      }
+
+    }
+  })
+
+  return updateRentalRequest
+
+}
+
+
 export const rentalRequestService = {
   createRentalRequest,
   getTenantRentalRequests,
   getRentalRequestById,
-  getLanlordRentalRequest
+  getLanlordRentalRequest, 
+  updateRentalStatus
 };

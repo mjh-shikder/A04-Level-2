@@ -92,9 +92,31 @@ const getLandlordRentalRequests = catchAsync(async (req: Request, res: Response)
 })
 
 
+//* Approve or Reject rental request by landlord
+const updateRentalRequestStatus = catchAsync(async (req: Request, res: Response) => { 
+
+  const { id } = req.params 
+
+  if (typeof id !== 'string') { 
+    throw new Error("Invalid Request Id provided")
+  }
+
+  const result = await rentalRequestService.updateRentalStatus(id, req.user!.userId, req.user!.role, req.body)
+
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Request Updated successfully",
+     data: result
+  })
+
+})
+
 export const rentalRequestController = {
   createRentalRequest,
   getTenantRentalRequests,
   getRentalRequestById,
   getLandlordRentalRequests,
+  updateRentalRequestStatus
 };
