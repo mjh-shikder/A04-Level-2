@@ -12,4 +12,6 @@ router.get("/tenants-requests", auth(UserRole.TENANT), rentalRequestController.g
 
 router.get("/tenants-requests/:id", auth(UserRole.TENANT), rentalRequestController.getRentalRequestById);
 
+router.get("/landlord/requests", auth(UserRole.LANDLORD), rentalRequestController.getLandlordRentalRequests)
+
 export const rentalRequestRouter = router

@@ -1,4 +1,4 @@
-import { RentalStatus, UserRole } from "../../../generated/prisma/client";
+import { Prisma, RentalStatus, UserRole } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 //* Creating Rental Request
@@ -163,9 +163,47 @@ const getRentalRequestById = async (id: string, userId: string, userRole: UserRo
 };
 
 
+// * Get Rental requests for landlord
+const getLanlordRentalRequest = async (landlordId: string, query: {status?: RentalStatus}) => { 
+  const where: Prisma.RentalRequestWhereInput = {landlordId}
+
+  if (query.status) { 
+    where.status = query.status
+  }
+
+  const requests = await prisma.rentalRequest.findMany({
+    where,
+    include: {
+      property: {
+        select: {
+          id: true,
+          title: true,
+          rent: true,
+          address: true,
+          city: true,
+        },
+      },
+      tenant: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          avatar: true
+        }
+      },
+      payments: true
+    }
+  })
+
+  return requests
+
+}
+
+
 export const rentalRequestService = {
   createRentalRequest,
   getTenantRentalRequests,
   getRentalRequestById,
-
+  getLanlordRentalRequest
 };

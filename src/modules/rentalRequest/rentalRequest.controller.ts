@@ -67,9 +67,34 @@ const getRentalRequestById = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+//* Get rental request for lanlord
+const getLandlordRentalRequests = catchAsync(async (req: Request, res: Response) => { 
+
+  const landlordId = req.user?.userId as string;
+
+  const userRole = req.user?.role as string;
+
+  if (userRole !== "LANDLORD") {
+    throw new Error("You are not authorized to access this resource");
+  }
+
+  const result = await rentalRequestService.getLanlordRentalRequest(landlordId, req.query)
+
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Landlord rental requests retrieved successfully",
+    data: result,
+  })
+
+
+})
+
+
 export const rentalRequestController = {
   createRentalRequest,
   getTenantRentalRequests,
   getRentalRequestById,
-  
+  getLandlordRentalRequests,
 };
