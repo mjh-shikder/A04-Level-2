@@ -56,10 +56,34 @@ const getPaymentHistory = catchAsync(async (req: Request, res: Response) => {
         message: "Payment history retrieved successfully",
         data: result,
     });
- })
+})
+
+
+//* Get paymetn by Id
+const getPaymentById = catchAsync(async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+    
+    const userId = req.user?.userId as string;
+
+
+    if (typeof id !== "string") {
+     throw new Error("Payment ID is not valid");
+    }
+
+    const result = await paymentService.getPaymentById(id, userId)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Payment details retrieved successfully",
+        data: result,
+    });
+})
 
 export const paymentController = {
     createPayment,
     confirmPayment,
     getPaymentHistory,
+    getPaymentById
 }

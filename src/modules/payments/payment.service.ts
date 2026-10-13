@@ -341,8 +341,56 @@ const getPaymentHistory = async (userId: string, role: UserRole) => {
     return payments;
 }
 
+
+//* Get payment by id
+const getPaymentById = async (paymentId: string, userId: string) => {
+
+    const payment = await prisma.payment.findUnique({
+        where: { id: paymentId },
+        include: {
+            rentalRequest: {
+                include: {
+                    property: {
+                        select: {
+                            id: true,
+                            title: true,
+                            rent: true,
+                            address: true,
+                            city: true,
+                            images: true,
+                        },
+                    },
+                    tenant: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            phone: true,
+                        },
+                    },
+                },
+            },
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    if (!payment) {
+        throw new Error("Payment not found");
+    }
+
+
+    return payment;
+};
+
 export const paymentService = {
     createPayment,
     confirmPayment,
     getPaymentHistory,
+    getPaymentById
 }
