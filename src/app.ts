@@ -13,6 +13,8 @@ import { adminRouter } from "./modules/admin/admin.route";
 import { paymentRouter, paymentWebhookRouter } from "./modules/payments/payment.route";
 import { authRouter } from "./modules/auth/auth.route";
 import { userRouter } from "./modules/user/user.route";
+import { globalErrorHandler } from "./errors/globalErrorHandler";
+import { notFoundHandler } from "./middlewares/notFoundErrorHandler";
 
 const app: Application = express();
 
@@ -49,5 +51,11 @@ app.use("/api/admin", adminRouter)
 app.use("/api/payment", paymentRouter)
 
 app.use("/api/user", userRouter)
+
+
+//* GLobal error
+app.use(notFoundHandler)
+
+app.use(globalErrorHandler)
 
 export default app; 
