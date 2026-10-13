@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/api/payment/confirm --events checkout.session.completed,checkout.session.expired,checkout.session.async_payment_failed",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
