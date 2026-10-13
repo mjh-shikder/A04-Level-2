@@ -15,4 +15,9 @@ export default {
 
   backend_base_url: process.env.BACKEND_BASE_URL || "http://localhost:5000",
   app_url: process.env.APP_URL || "http://localhost:3000",
+
+  stripe: {
+    secret_key: process.env.STRIPE_SECRET_KEY!,
+    webhook_secret: process.env.STRIPE_WEBHOOK_SECRET!,
+  },
 };
