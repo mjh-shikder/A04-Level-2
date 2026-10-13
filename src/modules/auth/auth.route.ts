@@ -11,4 +11,4 @@ router.post("/login", authController.login)
 router.get("/me",auth() ,authController.getMe)
 
 
-export const userRouter = router;
+export const authRouter = router;

@@ -5,13 +5,14 @@ import config from "./config";
 import { prisma } from "./lib/prisma";
 import httpstatus from "http-status";
 import bcrypt from "bcryptjs";
-import { userRouter } from "./modules/auth/auth.route";
 import { propertiesRouter } from "./modules/properties/properties.route";
 import { rentalRequestRouter } from "./modules/rentalRequest/rentalRequest.route";
 import { categoryRouter } from "./modules/category/category.route";
 import { reviewRouter } from "./modules/review/review.route";
 import { adminRouter } from "./modules/admin/admin.route";
 import { paymentRouter, paymentWebhookRouter } from "./modules/payments/payment.route";
+import { authRouter } from "./modules/auth/auth.route";
+import { userRouter } from "./modules/user/user.route";
 
 const app: Application = express();
 
@@ -33,7 +34,7 @@ app.get("/", (req: Request, res: Response) => {
     res.send("hello, world")
 })
 
-app.use("/api/auth", userRouter);
+app.use("/api/auth", authRouter);
 
 app.use("/api", propertiesRouter);
 
@@ -46,5 +47,7 @@ app.use("/api/review", reviewRouter)
 app.use("/api/admin", adminRouter)
 
 app.use("/api/payment", paymentRouter)
+
+app.use("/api/user", userRouter)
 
 export default app; 
