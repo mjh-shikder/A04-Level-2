@@ -1,4 +1,4 @@
-import { PaymentStatus, RentalStatus } from "../../../generated/prisma/client";
+import { PaymentStatus, RentalStatus, UserRole } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import crypto from "crypto";
 import { stripe } from "../../lib/stripe";
@@ -244,7 +244,105 @@ const confirmPayment = async (rawBody: Buffer, signature: string) => {
 
 }
 
+
+//* Get payment History 
+const getPaymentHistory = async (userId: string, role: UserRole) => { 
+
+    // For tenants: show their own payments
+    // For landlords: show payments related to their properties
+    // For admins: show all payments
+
+    if (role === UserRole.ADMIN) {
+        const payments = await prisma.payment.findMany({
+            orderBy: { createdAt: "desc" },
+            include: {
+                rentalRequest: {
+                    include: {
+                        property: {
+                            select: {
+                                id: true,
+                                title: true,
+                                rent: true,
+                                address: true,
+                                city: true,
+                                images: true,
+                            },
+                        },
+                    },
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    },
+                },
+            },
+        });
+        return payments;
+    }
+
+    if (role === UserRole.LANDLORD) {
+        const payments = await prisma.payment.findMany({
+            where: {
+                rentalRequest: {
+                    landlordId: userId,
+                },
+            },
+            orderBy: { createdAt: "desc" },
+            include: {
+                rentalRequest: {
+                    include: {
+                        property: {
+                            select: {
+                                id: true,
+                                title: true,
+                                rent: true,
+                                address: true,
+                                city: true,
+                            },
+                        },
+                        tenant: {
+                            select: {
+                                id: true,
+                                name: true,
+                                email: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        return payments;
+    }
+
+    // Default: TENANT show only their own payments
+    const payments = await prisma.payment.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        include: {
+            rentalRequest: {
+                include: {
+                    property: {
+                        select: {
+                            id: true,
+                            title: true,
+                            rent: true,
+                            address: true,
+                            city: true,
+                            images: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    return payments;
+}
+
 export const paymentService = {
     createPayment,
-    confirmPayment
+    confirmPayment,
+    getPaymentHistory,
 }

@@ -8,6 +8,8 @@ const router = Router();
 
 router.post("/create", auth(UserRole.TENANT), paymentController.createPayment);
 
+router.get("/history", auth(UserRole.ADMIN, UserRole.LANDLORD, UserRole.TENANT), paymentController.getPaymentHistory)
+
 export const paymentRouter = router;
 
 // * Webhook
