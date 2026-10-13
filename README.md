@@ -2,6 +2,17 @@
 
 A full-featured **REST API** for a property rental platform built with **Express.js**, **Prisma ORM**, **PostgreSQL**, and **Stripe** for payment processing.
 
+
+---
+
+## 🌐 Live URL
+
+- **Live API Base URL:** [Live Link](https://a04-level-2.onrender.com)
+- **Demo Video:** [Loom Video](https://www.loom.com/share/acaba23f73ba41518310788ba55631d6) *(if applicable)*
+- **API Health Check / Root Endpoint:** `GET /`
+
+
+
 ---
 
 ## ✨ Features

@@ -1,0 +1,722 @@
+{
+  "info": {
+    "_postman_id": "b60dd7f0-87ed-4edc-a8df-029fbf3eb69f",
+    "name": "RentNest Assignment-4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50457556",
+    "_collection_link": "https://go.postman.co/collection/50457556-b60dd7f0-87ed-4edc-a8df-029fbf3eb69f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\":\"Mr online tenant\",\r\n  \"email\" : \"online2@mail.com\",\r\n  \"password\": \"abcdef\",\r\n  \"phone\":\"01912345678\",\r\n  \"avatar\": \"www.google.com\",\r\n  \"role\": \"TENANT\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// Teant Login\r\n// {\r\n//   \"email\" : \"tenant@yz.com\",\r\n//   \"password\": \"abcdef\"\r\n// }\r\n\r\n//Lanlord 1 Login\r\n// {\r\n//   \"email\" : \"abc1@yz.com\",\r\n//   \"password\": \"abcdef\"\r\n// }\r\n\r\n// try login Blocked User\r\n// {\r\n//     \"email\": \"blockunblock@mail.com\",\r\n//     \"password\": \"abcdef\"\r\n// }\r\n\r\n\r\n\r\n// Admin Login\r\n{\r\n  \"email\" : \"admin@sudo.com\",\r\n  \"password\": \"abcdef\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Properties",
+      "item": [
+        {
+          "name": "Create Property",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryId\": \"3\",\n  \"landlordId\": \"0c845436-9745-438a-97a2-2f519b2551c8\",\n  \"title\": \"Spacious 3 Bedroom Apartment\",\n  \"description\": \"A modern apartment with great lighting and balcony view.\",\n  \"bedrooms\": 2,\n  \"bathrooms\": 2,\n  \"area\": 1200.5,\n  \"floor\": 5,\n  \"furnished\": true,\n  \"rent\": 25000.00,\n  \"securityDeposit\": 50000.00,\n  \"address\": \"123 Gulshan Avenue\",\n  \"city\": \"Dhaka\",\n  \"country\": \"Bangladesh\",\n  \"availableFrom\": \"2026-10-15T00:00:00.000Z\",\n  \"status\": \"AVAILABLE\",\n  \"images\": [\n    \"https://example.com/image1.jpg\",\n    \"https://example.com/image2.jpg\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/landlord/properties",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "landlord",
+                "properties"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Property",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"edited title\",\r\n  \"description\": \"edited description\",\r\n  \"bedrooms\": 20,\r\n  \"bathrooms\": 20,\r\n  \"address\": \"dhakar baire\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/landlord/properties/232d1f25-0271-485f-bfde-9e14919c9453",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "landlord",
+                "properties",
+                "232d1f25-0271-485f-bfde-9e14919c9453"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Property",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/landlord/properties/44aea861-cdec-4f50-958c-ac0460e9fc67",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "landlord",
+                "properties",
+                "44aea861-cdec-4f50-958c-ac0460e9fc67"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Landlord Properties",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/landlord/properties",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "landlord",
+                "properties"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Properties with Filtering",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/all/properties?city=dhaka&furnished=true&status=available",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "all",
+                "properties"
+              ],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "dhaka"
+                },
+                {
+                  "key": "furnished",
+                  "value": "true"
+                },
+                {
+                  "key": "status",
+                  "value": "available"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "3",
+                  "disabled": true
+                },
+                {
+                  "key": "bathrooms",
+                  "value": "20",
+                  "disabled": true
+                },
+                {
+                  "key": "bedrooms",
+                  "value": "20",
+                  "disabled": true
+                },
+                {
+                  "key": "country",
+                  "value": "bangladesh",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Detailed Property By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/properties/232d1f25-0271-485f-bfde-9e14919c9453",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "properties",
+                "232d1f25-0271-485f-bfde-9e14919c9453"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rent Request",
+      "item": [
+        {
+          "name": "Create Rental Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n   \"propertyId\": \"15765676-ac74-4bff-b238-ab66619b413d\",\r\n   \"startDate\": \"2026-11-01\",\r\n   \" endDate\": \"\",\r\n    \"message\": \"Hello 2\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/rental/create-request",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rental",
+                "create-request"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tenant Rental Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/rental/tenants-requests",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rental",
+                "tenants-requests"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tenant Rental Request by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/rental/tenants-requests/e1d9f988-6117-4655-862b-9f2975f26ef3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rental",
+                "tenants-requests",
+                "e1d9f988-6117-4655-862b-9f2975f26ef3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Landlord Rental Request for property",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/rental/landlord/requests",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rental",
+                "landlord",
+                "requests"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve or Reject Rental Request",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n   // \"status\" : \"REJECTED\"\r\n    \"status\" : \"APPROVED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/rental/landlord/requests/a2ecfbe3-f2e9-4d3e-a579-c7e4ff83050e",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rental",
+                "landlord",
+                "requests",
+                "a2ecfbe3-f2e9-4d3e-a579-c7e4ff83050e"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Get All Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/category/all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "category",
+                "all"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Review",
+      "item": [
+        {
+          "name": "Creating Review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"propertyId\" : \"15765676-ac74-4bff-b238-ab66619b413d\",\r\n    \"rentalRequestId\": \"8b14b117-13c8-47b5-9dd3-df983d4bd829\",\r\n    \"rating\": \"4.5\",\r\n    \"comment\": \"jol dhuke galeo valo e ase\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/review/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "review",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// Teant\r\n{\r\n  \"email\" : \"tenant@yz.com\",\r\n  \"password\": \"abcdef\"\r\n}\r\n\r\n//lanlord 1 \r\n// {\r\n//   \"email\" : \"abc1@yz.com\",\r\n//   \"password\": \"abcdef\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/all-users",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "admin",
+                "all-users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Properties",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/admin/all-properties",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "admin",
+                "all-properties"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Rental Requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://a04-level-2.onrender.com/api/admin/all-rentals",
+              "protocol": "https",
+              "host": [
+                "a04-level-2",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "all-rentals"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Block or Unblock Users",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// UserStatus = \"ACTIVE\" | \"BLOCKED\"\r\n\r\n// {\r\n//     \"status\" : \"ACTIVE\"\r\n// }\r\n\r\n{\r\n    \"status\" : \"BLOCKED\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/users/c3ac9fdb-6765-4baf-8278-0717e0675caa",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "admin",
+                "users",
+                "c3ac9fdb-6765-4baf-8278-0717e0675caa"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Payment Session",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"rentalRequestId\": \"98bded35-2b18-4917-addc-de7f5a90fd1f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/payment/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "payment",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/payment/history",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "payment",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment Details By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/payment/ee6b22db-e7ff-46d4-8689-0b84be4f7893",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "payment",
+                "ee6b22db-e7ff-46d4-8689-0b84be4f7893"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Complete payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/payment/confirm",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "payment",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Updated Name \",\r\n    \"phone\" : \"019599595959\",\r\n    \"avatar\": \"www.youtube.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/user/update",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "user",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Testing",
+      "item": [
+        {
+          "name": "Route Not Found Testing",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/rental-request/dimuna",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "rental-request",
+                "dimuna"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
