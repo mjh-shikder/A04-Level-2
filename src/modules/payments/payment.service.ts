@@ -3,6 +3,7 @@ import { prisma } from "../../lib/prisma";
 import crypto from "crypto";
 import { stripe } from "../../lib/stripe";
 import config from "../../config";
+import Stripe from "stripe";
 
 const createPayment = async (userId: string, payload: { rentalRequestId: string }) => { 
 
@@ -137,7 +138,113 @@ const createPayment = async (userId: string, payload: { rentalRequestId: string 
 }
 
 
+// * Confirm payment Webhook 
+const confirmPayment = async (rawBody: Buffer, signature: string) => { 
+
+    let event: Stripe.Event
+
+    try {
+         event = stripe.webhooks.constructEvent(
+            rawBody,
+            signature,
+            config.stripe.webhook_secret
+        );
+    } catch (error) {
+         throw new Error(`Webhook signature verification failed: ${(error as Error).message}`);
+    }
+
+
+    if (event.type === "checkout.session.completed") {
+        const session = event.data.object as Stripe.Checkout.Session;
+
+        const { rentalRequestId, userId, transactionId } = session.metadata || {};
+
+        if (!transactionId) {
+            throw new Error("Transaction ID not found in session metadata");
+        }
+
+        // Find the payment by transactionId
+        const payment = await prisma.payment.findUnique({
+            where: { transactionId },
+        });
+
+        if (!payment) {
+            throw new Error(`Payment not found for transaction: ${transactionId}`);
+        }
+
+        if (payment.status === PaymentStatus.COMPLETED) {
+
+             return { received: true, message: "Payment already processed" };
+        }
+
+
+        //* update payment and rental request
+
+           await prisma.$transaction(async (tx) => {
+            // Update the payment record
+            await tx.payment.update({
+                where: { transactionId },
+                data: {
+                    status: PaymentStatus.COMPLETED,
+                    paidAt: new Date(),
+                    cardType: session.payment_method_types?.[0] || null,
+                    bankTranId: session.payment_intent as string || null,
+                    gatewayResponse: {
+                        sessionId: session.id,
+                        paymentIntent: typeof session.payment_intent === "string"
+                            ? session.payment_intent
+                            : session.payment_intent?.id ?? null,
+                        paymentStatus: session.payment_status,
+                        amountTotal: session.amount_total,
+                        currency: session.currency,
+                        customerEmail: session.customer_email,
+                    },
+                },
+            });
+
+            // Update rental request status to PAID
+            if (rentalRequestId) {
+                await tx.rentalRequest.update({
+                    where: { id: rentalRequestId },
+                    data: {
+                        status: RentalStatus.PAID,
+                    },
+                });
+            }
+        });
+
+        
+        return { received: true, message: "Payment confirmed successfully" };
+    }
+
+
+    //* if paymet fail
+
+     if (event.type === "checkout.session.expired" || event.type === "checkout.session.async_payment_failed") {
+        const session = event.data.object as Stripe.Checkout.Session;
+        const { transactionId } = session.metadata || {};
+
+        if (transactionId) {
+            await prisma.payment.update({
+                where: { transactionId },
+                data: {
+                    status: PaymentStatus.FAILED,
+                    gatewayResponse: {
+                        sessionId: session.id,
+                        failureReason: event.type,
+                    },
+                },
+            });
+        }
+
+        return { received: true, message: "Payment failure recorded" };
+    }
+
+    return { received: true, message: `Unhandled event type: ${event.type}` };
+
+}
+
 export const paymentService = {
     createPayment,
-    
+    confirmPayment
 }

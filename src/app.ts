@@ -11,7 +11,7 @@ import { rentalRequestRouter } from "./modules/rentalRequest/rentalRequest.route
 import { categoryRouter } from "./modules/category/category.route";
 import { reviewRouter } from "./modules/review/review.route";
 import { adminRouter } from "./modules/admin/admin.route";
-import { paymentRouter } from "./modules/payments/payment.route";
+import { paymentRouter, paymentWebhookRouter } from "./modules/payments/payment.route";
 
 const app: Application = express();
 
@@ -19,6 +19,11 @@ app.use(cors({
     origin: config.app_url,
     credentials: true,
 }));
+
+
+app.use("/api/payment", paymentWebhookRouter)
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

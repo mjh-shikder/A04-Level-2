@@ -20,7 +20,28 @@ const createPayment = catchAsync(async (req: Request, res: Response) => {
 })
 
 
+// * Confinr payment Stripe webhook 
+const confirmPayment = catchAsync(async (req: Request, res: Response) => { 
+
+    const signature = req.headers["stripe-signature"] as string;
+
+    if (!signature) { 
+        throw new Error ("Missing Stripe Signature Header")
+    }
+
+    const result = await paymentService.confirmPayment(req.body, signature)
+
+     sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: result.message,
+        data: result,
+    });
+
+})
+
 export const paymentController = {
     createPayment,
+    confirmPayment,
 
 }
