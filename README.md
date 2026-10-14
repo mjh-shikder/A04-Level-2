@@ -8,6 +8,7 @@ A full-featured **REST API** for a property rental platform built with **Express
 ## 🌐 Live URL
 
 - **Live API Base URL:** [Live Link](https://a04-level-2.onrender.com)
+- **Database ERD Diagram:** [ERD Diagram](https://drawsql.app/teams/mjh-dev/diagrams/assignment-4)
 - **Demo Video:** [Loom Video](https://www.loom.com/share/acaba23f73ba41518310788ba55631d6)
 
 
